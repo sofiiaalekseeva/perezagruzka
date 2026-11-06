@@ -6,8 +6,10 @@ const day=(d=new Date())=>d.toLocaleDateString('sv');
 const fmt=s=>{s=Math.round(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 const MOOD={calm:{t:'Спокойно',v:8.5,i:'😌'},tired:{t:'Усталость',v:5.5,i:'😴'},anxious:{t:'Тревога',v:3.5,i:'😟'}};
 const SCALE=['Никогда','Редко','Иногда','Часто','Всегда'];
-const DEF=[{id:'t1',title:'Экспресс-тест стресса',own:0,q:['Мне трудно расслабиться','Я раздражаюсь по мелочам','Мне сложно сосредоточиться','Я плохо сплю из-за мыслей']},{id:'t2',title:'Шкала энергии',own:0,q:['Я просыпаюсь бодрым','К вечеру у меня остаются силы','Мне хочется заниматься любимыми делами']}];
-const S={moods:L('moods',{}),diary:L('diary',[]),voice:L('voice',[]),tests:L('tests',DEF),res:L('res',[]),games:L('games',[])};
+const DEF=[{id:'t1',title:'Экспресс-тест стресса',own:0,dir:'load',q:['Мне трудно расслабиться','Я раздражаюсь по мелочам','Мне сложно сосредоточиться','Я плохо сплю из-за мыслей']},{id:'t2',title:'Шкала энергии',own:0,dir:'res',q:['Я просыпаюсь бодрым','К вечеру у меня остаются силы','Мне хочется заниматься любимыми делами']}];
+/* Встроенные тесты берутся из DEF (работают на любом хостинге), в браузере хранятся только свои */
+const loadTests=()=>[...DEF,...L('tests',[]).filter(t=>t.own&&!DEF.some(d=>d.id===t.id||d.title===t.title))];
+const S={moods:L('moods',{}),diary:L('diary',[]),voice:L('voice',[]),tests:loadTests(),res:L('res',[]),games:L('games',[])};
 let R={avg:null,week:0},tm;function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tm);tm=setTimeout(()=>e.classList.remove('on'),2200)}
 const last7=()=>[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return d});
 
@@ -97,6 +99,7 @@ const INT={
   {t:'Средний ресурс',d:'Вы в рабочем состоянии: силы есть, но запас небольшой. Его стоит поддерживать, пока он не просел.',tips:['Планируйте отдых заранее, не ждите усталости','Двигайтесь 5–10 минут в день','Верните в неделю занятие, которое вас радует']},
   {t:'Высокий ресурс',d:'Вы полны энергии и хорошо восстанавливаетесь. Сейчас удобно браться за важное и поддерживать других.',tips:['Закрепите то, что вас наполняет, и повторяйте регулярно','Используйте этот период для планов и новых шагов','Не забывайте про отдых, даже когда сил много']}]},
 COL=['#a9c4ad','#d3dcae','#ecd592','#d9a273'];
+const saveTests=()=>Wr('tests',S.tests.filter(t=>t.own));
 const zone=p=>p<25?0:p<50?1:p<75?2:3,dirOf=t=>t.dir||(t.id==='t2'?'res':'load');
 function submitTest(){
   const t=S.tests.find(x=>x.id===$('#tRun').dataset.id),a=[];
@@ -137,10 +140,13 @@ document.addEventListener('click',e=>{
   else if(a==='trun')runTest(id);
   else if(a==='tback')tests();
   else if(a==='tsub')submitTest();
-  else if(a==='tdel'){S.tests=S.tests.filter(x=>x.id!==id);Wr('tests',S.tests);tests()}
+  else if(a==='tdel'){S.tests=S.tests.filter(x=>x.id!==id);saveTests();tests()}
+  else if(a==='texp'){const c=S.tests.filter(t=>t.own);if(!c.length)return toast('Своих тестов пока нет');
+    const code=c.map(t=>'  '+JSON.stringify({id:t.id,title:t.title,own:0,dir:t.dir||'load',q:t.q})).join(',\n');
+    const o=$('#tOut');o.hidden=false;o.value=code;o.select();navigator.clipboard&&navigator.clipboard.writeText(code).catch(()=>{});toast('Код готов: вставьте его в массив DEF в app.js')}
   else if(a==='tadd'){const title=$('#tTitle').value.trim(),q=$('#tQs').value.split('\n').map(x=>x.trim()).filter(Boolean);
     if(!title||!q.length)return toast('Укажите название и хотя бы один вопрос');
-    S.tests.push({id:'u'+Date.now(),title,q,own:1,dir:$('#tDir').value});Wr('tests',S.tests);$('#tTitle').value=$('#tQs').value='';$('#tNew').open=false;tests();toast('Тест создан')}
+    S.tests.push({id:'u'+Date.now(),title,q,own:1,dir:$('#tDir').value});saveTests();$('#tTitle').value=$('#tQs').value='';$('#tNew').open=false;tests();toast('Тест создан')}
 });
 /* Аккаунт: любые логин и пароль подходят, пароль нигде не проверяется и не хранится */
 let U=L('user',null);const USERS=L('users',{});
