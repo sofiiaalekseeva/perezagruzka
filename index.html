@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Перезагрузка</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="#home"><span class="lg">✦</span>Перезагрузка</a>
+  <nav id="nav">
+    <a href="#home">Главная панель</a>
+    <a href="#voice">Голосовой ассистент</a>
+    <a href="#diary">Дневник</a>
+    <a href="#tests">Тесты</a>
+    <a class="gicon" id="gIcon" href="#game" aria-label="Карточная игра «Перезагрузка»" title="Карточная игра"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="10" height="14" rx="2" transform="rotate(-10 8 13)"/><rect x="11" y="4" width="10" height="14" rx="2" transform="rotate(8 16 11)"/><path d="M16 8.5l.8 1.7 1.7.8-1.7.8-.8 1.7-.8-1.7-1.7-.8 1.7-.8z"/></svg></a>
+  </nav>
+  <div class="tools">
+    <button class="acc" data-a="acc" aria-label="Личный кабинет"><span class="av" id="avTxt">☺</span><span id="uName">Войти</span></button>
+  </div>
+</header>
+
+<main>
+<!-- Главная -->
+<section class="page" id="home">
+  <div class="grid">
+    <div class="card">
+      <span class="sm" id="date"></span>
+      <h1 id="hi">Привет, как ты себя чувствуешь сегодня?</h1>
+      <p class="muted">Отметьте состояние — это поможет точнее подобрать поддержку.</p>
+      <div class="moods" id="moods">
+        <button data-a="mood" data-m="calm"><i>😌</i>Спокойно</button>
+        <button data-a="mood" data-m="tired"><i>😴</i>Усталость</button>
+        <button data-a="mood" data-m="anxious"><i>😟</i>Тревога</button>
+      </div>
+      <a class="cta" href="#voice"><span class="mic">🎙</span><span><b>Рассказать голосом</b><small>Голосовой ассистент рядом</small></span></a>
+      <div class="row2"><a class="btn" href="#tests">Пройти экспресс-тест</a><a class="btn" href="#diary">Записать мысли</a></div>
+    </div>
+
+    <div class="card mid">
+      <span class="sm">Ваше состояние</span>
+      <h2>Баланс начинается с понимания себя</h2>
+      <svg class="orb" viewBox="0 0 200 200" aria-hidden="true"><defs><radialGradient id="g1" cx="35%" cy="30%"><stop offset="0" stop-color="#e6efe6"/><stop offset=".6" stop-color="#bcd3c4"/><stop offset="1" stop-color="#a9bdd3"/></radialGradient></defs><path fill="url(#g1)"><animate attributeName="d" dur="9s" repeatCount="indefinite" values="M100 20C150 15 185 60 180 105S145 185 95 180 15 150 20 100 55 25 100 20Z;M105 25C155 30 180 75 175 115S135 180 90 175 20 140 25 95 60 20 105 25Z;M100 20C150 15 185 60 180 105S145 185 95 180 15 150 20 100 55 25 100 20Z"/></path></svg>
+      <div class="sum">
+        <div class="sumh"><span class="ic">∿</span><div><span class="sm">Сводка состояния</span><h3>Мы в одной комнате</h3></div></div>
+        <div class="big"><span class="num" id="score">—</span><span class="sm">из 10</span></div>
+        <dl>
+          <div><dt>Уровень стресса</dt><dd><span class="pill" id="stress">—</span></dd></div>
+          <div><dt>Эмоциональный фон</dt><dd><span class="pill warm" id="bg">—</span></dd></div>
+          <div><dt>Запас энергии</dt><dd id="energy">—</dd></div>
+        </dl>
+        <div class="tip"><b>Рекомендация</b><span id="tip"></span></div>
+        <a class="lnk" href="#diary">Открыть дневник</a>
+      </div>
+    </div>
+
+    <div class="card dark">
+      <div class="dh"><div><span class="sm">Блок активности</span><h3>Ваш ритм</h3></div><div class="r"><span class="num" id="week">0%</span><span class="sm">за неделю</span></div></div>
+      <div class="ringw"><svg viewBox="0 0 140 140"><circle cx="70" cy="70" r="58" class="t"/><circle cx="70" cy="70" r="58" class="p" id="ring"/></svg><div><span class="num" id="streak">0</span><span class="sm">дней подряд</span></div></div>
+      <div class="bar"><span>Голосовые записи</span><b id="b-v-p">0%</b><i><u id="b-v"></u></i></div>
+      <div class="bar"><span>Дневник</span><b id="b-d-p">0%</b><i><u id="b-d"></u></i></div>
+      <div class="bar"><span>Тесты</span><b id="b-t-p">0%</b><i><u id="b-t"></u></i></div>
+    </div>
+  </div>
+
+  <div class="card rep">
+    <div class="repl">
+      <span class="sm">Личная статистика</span><h2>Блок отчётов</h2>
+      <p class="muted">Наблюдайте за изменениями и замечайте даже небольшие улучшения.</p>
+      <ul class="rl">
+        <li><button data-a="rep" data-k="health"><span class="ck">✓</span><span><b>Улучшение здоровья</b><small>Общая динамика самочувствия</small></span><em>→</em></button></li>
+        <li><button data-a="rep" data-k="mood"><span class="ck">✓</span><span><b>История настроения</b><small>Изменения за последние 30 дней</small></span><em>→</em></button></li>
+        <li><button data-a="rep" data-k="tests"><span class="ck">✓</span><span><b>Результаты тестов</b><small>Ваши последние самооценки</small></span><em>→</em></button></li>
+        <li><button data-a="rep" data-k="week"><span class="ck">✓</span><span><b>Еженедельный прогресс</b><small>Краткий итог и рекомендации</small></span><em>→</em></button></li>
+      </ul>
+    </div>
+    <div class="chartc">
+      <div class="ch"><div><span class="sm">Динамика состояния</span><h3>Последние 7 дней</h3></div><span class="pill" id="badge">—</span></div>
+      <div class="leg"><i></i>Уровень состояния</div>
+      <div id="chart"></div>
+      <p class="muted c" id="chartNote"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Голос -->
+<section class="page" id="voice">
+  <div class="head"><h1>Голосовой ассистент</h1><p class="muted">Расскажите, что у вас на душе. Запись сохраняется только в вашем браузере.</p></div>
+  <div class="card recc">
+    <button class="recb" id="recBtn" data-a="rec" aria-label="Запись"><span></span></button>
+    <div class="wave" id="wave"></div>
+    <p id="recLbl" class="muted">Нажмите, чтобы начать запись</p>
+  </div>
+  <h2 class="sec">Ваши записи</h2>
+  <div id="vList" class="list"></div>
+</section>
+
+<!-- Дневник -->
+<section class="page" id="diary">
+  <div class="head"><h1>Дневник</h1><p class="muted">Короткие заметки помогают замечать, что влияет на самочувствие.</p></div>
+  <div class="card">
+    <textarea id="dText" rows="4" placeholder="Что сегодня произошло? Что вы чувствуете?"></textarea>
+    <div class="frow"><div class="chips" id="dMoods"><button data-a="dmood" data-m="calm">😌 Спокойно</button><button data-a="dmood" data-m="tired">😴 Усталость</button><button data-a="dmood" data-m="anxious">😟 Тревога</button></div><button class="pri" data-a="dadd">Сохранить запись</button></div>
+  </div>
+  <h2 class="sec">Записи</h2>
+  <div id="dList" class="list"></div>
+</section>
+
+<!-- Тесты -->
+<section class="page" id="tests">
+  <div class="head"><h1>Тесты</h1><p class="muted">Пройдите готовый тест или создайте свой.</p></div>
+  <div id="tList" class="tgrid"></div>
+  <div id="tRun" class="card" hidden></div>
+  <details class="card add" id="tNew">
+    <summary>Добавить свой тест</summary>
+    <input id="tTitle" placeholder="Название теста">
+    <textarea id="tQs" rows="5" placeholder="Каждый вопрос с новой строки. Ответ — по шкале от «Никогда» до «Всегда»."></textarea>
+    <select id="tDir" aria-label="Что означает высокий результат"><option value="load">Высокий балл — больше нагрузки и напряжения</option><option value="res">Высокий балл — больше сил и ресурса</option></select>
+    <button class="pri" data-a="tadd">Создать тест</button>
+  </details>
+</section>
+<!-- Игра -->
+<section class="page" id="game">
+  <div class="head"><h1>Перезагрузка: сохрани свой ресурс</h1><p class="muted">Карточная игра для преподавателей. 1–2 человека, 20–30 минут.</p></div>
+  <div class="card gbox"><div class="steps" id="gSteps"></div><div id="gBox"></div></div>
+  <details class="card add">
+    <summary>Правила игры</summary>
+    <ol class="rules">
+      <li>Участники: 1–2 человека, продолжительность 20–30 минут.</li>
+      <li>Четыре отдельные колоды: «Ситуация», «Осознание», «Ресурс», «Выбор».</li>
+      <li>До начала оцените ресурс от 0 до 10. Это субъективная оценка, не диагноз.</li>
+      <li>Возьмите по одной карте из каждой колоды и выполните задания по порядку.</li>
+      <li>В паре слушайте без критики и советов, если о них не попросили.</li>
+      <li>В конце повторно оцените ресурс и запишите один шаг на ближайшие сутки.</li>
+      <li>Любую карту можно пропустить. Игру можно остановить в любой момент.</li>
+    </ol>
+    <p class="muted">Шкала: 0 — совсем нет сил; 1–3 — очень мало; 4–6 — средний уровень; 7–8 — достаточно сил; 9–10 — высокий уровень ресурса.</p>
+    <p class="muted">Игра нужна для саморефлексии и профилактики. Она не диагностический тест и не заменяет помощь психолога или врача.</p>
+  </details>
+  <h2 class="sec">История игр</h2>
+  <div id="gList" class="list"></div>
+</section>
+</main>
+<dialog id="auth" class="dlg">
+  <button class="x" data-a="close" aria-label="Закрыть">✕</button>
+  <div class="tabs"><button class="on" data-a="tab" data-t="in">Вход</button><button data-a="tab" data-t="up">Регистрация</button></div>
+  <form id="fIn"><input name="login" placeholder="Логин" autocomplete="off"><input name="pass" type="password" placeholder="Пароль" autocomplete="off"><button class="pri" type="submit">Войти</button></form>
+  <form id="fUp" hidden><input name="name" placeholder="Имя" autocomplete="off"><input name="login" placeholder="Логин" autocomplete="off"><input name="pass" type="password" placeholder="Пароль" autocomplete="off"><button class="pri" type="submit">Зарегистрироваться</button></form>
+</dialog>
+<dialog id="acc" class="dlg">
+  <button class="x" data-a="close" aria-label="Закрыть">✕</button>
+  <h2 id="accName"></h2><p class="muted" id="accLogin"></p>
+  <div class="accs" id="accStats"></div>
+  <button class="btn" data-a="logout">Выйти</button>
+</dialog>
+<div id="toast" role="status"></div>
+<script src="cards.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
